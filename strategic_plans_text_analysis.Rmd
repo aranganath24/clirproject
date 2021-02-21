@@ -1,0 +1,81 @@
+---
+title: "Strategic Plan Word Clouds"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/Documents/strategic_plans")
+```
+
+## R Load Packages
+
+```{r, message=FALSE, results=FALSE}
+library(pdftools)
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(tidyverse)
+```
+
+## Load data
+
+In the following, we make a list of PDF files in our directory of plans, and then iteratively assign the text contained in those files into a list called "plans"
+
+```{r, results=FALSE, message=FALSE}
+files<-list.files(pattern="pdf$")
+plans<-lapply(files,pdf_text)
+plans
+```
+
+## Make a corpus
+
+```{r, results=FALSE, message=FALSE}
+corp<-Corpus(URISource(files),readerControl = list(reader=readPDF))
+```
+
+## Make term document matrix
+
+```{r}
+plans.tdm <- TermDocumentMatrix(corp, 
+                                   control = 
+                                     list(removePunctuation = TRUE,
+                                          stopwords = TRUE,
+                                          tolower = TRUE,
+                                          stemming = TRUE,
+                                          removeNumbers = TRUE,
+                                          bounds = list(global = c(3, Inf)))) 
+```
+
+## Inspect patterns
+
+We can now inspect patterns in the text. 
+
+For instance, we can generate a table that gives us the 25 most frequently appearing words, and the number of times they appear in the corpus:
+
+```{r}
+freq <- rowSums(as.matrix(plans.tdm))
+frequency_descending_order<-sort(freq,decreasing=TRUE)
+head(frequency_descending_order,25)
+```
+
+Find words that appear at least 150 times:
+```{r}
+findFreqTerms(plans.tdm, lowfreq = 150, highfreq = Inf)
+```
+
+Find words that appear at least 75 times:
+
+```{r}
+findFreqTerms(plans.tdm, lowfreq = 75, highfreq = Inf)
+```
+
+## Generate Word Cloud
+
+```{r}
+matrix <- as.matrix(plans.tdm) 
+words <- sort(rowSums(matrix),decreasing=TRUE) 
+df <- data.frame(word = names(words),freq=words)
+wordcloud(words = df$word, freq = df$freq, min.freq = 1, max.words=200, random.order=FALSE, rot.per=0.35, colors=brewer.pal(8, "Dark2"))
+```
+
