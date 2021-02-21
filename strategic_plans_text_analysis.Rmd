@@ -51,7 +51,7 @@ plans.tdm <- TermDocumentMatrix(corp,
 
 We can now inspect patterns in the text. 
 
-For instance, we can generate a table that gives us the 25 most frequently appearing words, and the number of times they appear in the corpus:
+For example, we can generate a table that gives us the 25 most frequently appearing words, and the number of times they appear in the corpus:
 
 ```{r}
 freq <- rowSums(as.matrix(plans.tdm))
