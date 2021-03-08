@@ -1,11 +1,11 @@
 ---
-title: "Strategic Plan Word Clouds"
+title: "Strategic Plan Preliminary Text Analysis"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setwd("~/Documents/strategic_plans")
+setwd("~/Documents/strategic_plans/update")
 ```
 
 ## R Load Packages
@@ -16,6 +16,7 @@ library(tm)
 library(SnowballC)
 library(wordcloud)
 library(tidyverse)
+library(knitr)
 ```
 
 ## Load data
@@ -42,7 +43,7 @@ plans.tdm <- TermDocumentMatrix(corp,
                                      list(removePunctuation = TRUE,
                                           stopwords = TRUE,
                                           tolower = TRUE,
-                                          stemming = TRUE,
+                                          stemming = FALSE,
                                           removeNumbers = TRUE,
                                           bounds = list(global = c(3, Inf)))) 
 ```
@@ -70,12 +71,299 @@ Find words that appear at least 75 times:
 findFreqTerms(plans.tdm, lowfreq = 75, highfreq = Inf)
 ```
 
+## Words of interest
+
+```{r,echo=FALSE,results=FALSE}
+##baseline
+freq["library"]
+
+##digital divides
+freq["book"] + freq["books"]
+freq["ebook"] + freq["ebooks"]
+freq["read"]
+freq["text"] +freq["texts"]
+freq["electronic"]
+freq["amazon"]
+freq["digital"]
+freq["software"]
+freq["print"]
+freq["data"]
+freq["lab"]
+freq["archive"] + freq["archives"]
+freq["materials"] + freq["material"]
+freq["circulation"]
+freq["physical"]
+freq["object"]+freq["objects"]
+freq["computing"]
+freq["space"]
+freq["place"]
+freq["building"]
+freq["infrastructure"]
+freq["construction"]
+freq["architecture"]
+freq["curation"]
+freq["reference"]
+freq["desk"]
+freq["virtual"]
+freq["stacks"]
+freq["online"]
+freq["google"]
+freq["web"]
+
+##past and present
+freq["culture"]
+freq["innovation"]
+freq["tradition"]
+freq["technology"]
+freq["progress"]
+freq["invention"]
+freq["revolution"]
+freq["reimagine"]
+freq["rethink"]
+freq["change"]
+freq["preserve"] +freq["preservation"]
+freq["continuity"]+freq["continue"]
+freq["maintain"]
+freq["storage"]
+
+##service and relationships
+freq["customer"]+freq["customers"]
+freq["patron"]+freq["patrons"]
+freq["user"]+freq["users"]
+freq["community"]
+freq["vendor"]+freq["vendors"]
+freq["students"]+freq["student"]
+freq["faculty"]
+freq["professor"]+freq["professors"]
+freq["centers"]+freq["center"]
+freq["staff"]
+freq["labor"]
+freq["state"]
+freq["government"]
+freq["public"]
+freq["teacher"]+freq["teaching"]
+freq["stakeholder"]
+freq["partnership"]
+freq["international"]
+freq["global"]
+freq["local"]
+
+
+##academic cultures
+freq["science"]+freq["scientific"]+freq["sciences"]
+freq["humanities"]+freq["humanistic"]
+freq["art"]+freq["arts"]
+freq["interdisciplinary"]
+freq["multidisciplinary"]
+freq["transdisciplinary"]
+freq["specialize"]
+freq["statistics"]
+freq["metrics"]+freq["metric"]
+freq["sharing"]+freq["share"]
+freq["transparency"]
+
+##Politics and Economics
+freq["land"]
+freq["indigenous"]
+freq["race"]
+freq["labor"]
+freq["capital"]
+freq["property"]
+freq["economy"]
+freq["sustainable"]+freq["sustainability"]
+freq["production"]
+freq["distribution"]
+freq["consumption"]
+freq["budget"] +freq["budgets"]
+freq["climate"]
+freq["commercial"]+freq["commerce"]
+freq["open"]
+freq["equity"]
+freq["free"]
+freq["funding"]
+freq["value"]
+freq["diversity"]
+freq["copyright"]
+freq["politics"]+freq["political"]
+freq["freedom"]
+freq["justice"]
+freq["institutions"]+freq["institution"]
+freq["business"]
+freq["union"]
+freq["market"]
+freq["democracy"]
+freq["capitalism"]
+freq["equality"]
+freq["monopoly"]+freq["monopolies"]
+freq["neoliberalism"]+freq["neoliberal"]
+freq["inequality"]
+freq["trump"]
+freq["censor"]+freq["censorship"]
+freq["adjunct"]
+freq["precariat"]
+freq["invisible"]
+freq["gentrification"]+freq["gentrify"]
+freq["China"]
+freq["Europe"]
+freq["racism"]
+freq["discrimination"]
+freq["tribe"]
+
+## Words from "Keywords: The New Language of Capitalism" by John Patrick Leary
+freq["accountability"] +freq["accountable"]
+freq["brand"]
+freq["choice"]
+freq["collaboration"]
+freq["conversation"]
+freq["content"]
+freq["creative"]+freq["creativity"]
+freq["curator"]+freq["curate"]
+freq["data"]
+freq["design"]
+freq["ecosystem"]
+freq["empowerment"]+freq["empower"]
+freq["engagement"]
+freq["flexible"] +freq["flexibility"]
+freq["free"]
+freq["innovation"]
+freq["market"]+freq["marketplace"]
+freq["nimble"]
+freq["outcome"]
+freq["pivot"]
+freq["robust"]
+freq["share"]+freq["sharing"]
+freq["smart"]
+freq["solution"]
+freq["sustainable"] + freq["sustainability"]
+freq["wellness"]
+freq["artisanal"] +freq["artisan"]
+freq["coach"]
+freq["disruption"]
+freq["entrepreneur"] + freq["entrepreneurship"]
+freq["fail"]+freq["failure"]
+freq["grit"]
+freq["hack"]+freq["hacker"]
+freq["meritocracy"]
+freq["passion"]
+freq["resilient"]+freq["resilience"]
+freq["synergy"]
+```
+
+### Digital Divides
+```{r,echo=FALSE}
+              
+word<-c("book(s)","ebook(s)","read","text(s)","electronic","amazon","digital",
+        "software","print","data","lab","archive(s)","material(s)","circulation",
+        "physical","object(s)","computing","space","place","building","infrastructure",
+        "construction","architecture","curation","reference","desk","virtual","stacks",
+        "online","google","web")
+
+frequency<-c(143,25,8,38,115,0,1016,67,143,585,57,140,418,17,305,32,
+             17,373,104,215,195,15,33,54,46,7,96,13,269,23,99)
+
+digital_divides<-cbind(word,frequency)
+
+kable(digital_divides)
+```
+
+
+### past and present
+
+```{r,echo=FALSE}
+
+word<-c("culture", "innovation","tradition","technology","progress","invention","revolution",
+        "reimagine","rethink","change","preserve/preservation","continuity/continue","maintain",
+        "storage")
+        
+frequency<-c(169,205,4,254,67,7,11,14,6,107,363,211,80,74)
+
+past_and_present<-cbind(word,frequency)
+
+kable(past_and_present)
+
+```
+
+### service and relationships
+
+```{r,echo=FALSE}
+word<-c("customer(s)","patron(s)","user(s)","community","vendor(s)","student(s)",
+        "faculty","professor(s)","center(s)","staff","labor","state","government","public",
+        "teacher/teaching","stakeholder","partnership","international","global","local")
+
+frequency<-c(13,51,580,747,20,1582,1159,52,284,912,6,254,38,222,519,22,102,133,284,145)
+
+service_and_relationships<-cbind(word,frequency)
+
+kable(service_and_relationships)
+```
+
+### academic cultures
+
+```{r,echo=FALSE}
+word<-c("science/scientific/sciences","humanities","humanistic","art(s)","interdisciplinary",
+        "multidisciplinary","transdisciplinary","specialize/specialization","statistics","metric(s)",
+        "sharing/share","transparency")
+
+frequency<-c(258,103,0,138,83,18,4,0,36,88,203,33)
+
+academic_cultures<-cbind(word,frequency)
+
+kable(academic_cultures)
+```
+
+
+
+### politics and economics
+```{r,echo=FALSE}
+word<-c("land","indigenous","race","labor","capital","property","economy",
+        "sustainable/sustainability","production","distribution","consumption",
+        "budget(s)","climate","commercial/commerce","open","equity","free","funding",
+        "value","diversity","copyright","politics/political","freedom","justice",
+        "institution(s)","business","union","market","democracy","capitalism",
+        "equality","monopoly/monopolies","neoliberalism/neoliberal","inequality",
+        "trump","censor/censorship","adjunct","precariat","invisible",
+        "gentrification/gentrify","China","Europe","racism","discrimination","tribe")
+
+frequency<-c(16,7,10,6,29,22,6,213,32,11,10,140,38,16,517,94,39,162,158,443,
+             35,11,37,21,200,56,4,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+
+politics_economics<-cbind(word,frequency)
+
+kable(politics_economics)
+```
+
+### words from "Keywords:The New Language of Capitalism" by John Patrick Leary
+
+```{r,echo=FALSE}
+
+word<-c("accountability/accountable","brand","choice","collaboration","conversation",
+        "content","creative/creativity","curator/curate","data","design","ecosystem",
+        "empowerment/empower","engagement","flexible/flexibility","free","innovation",
+        "market/marketplace","nimble","outcome","pivot","robust","share/sharing",
+        "smart","solution","sustainable/sustainability","wellness","artisanal/artisan",
+        "coach","disruption","entrepreneur/entrepreneurship","fail/failure","grit",
+        "hack/hacker","meritocracy","passion","resilient/resilience","synergy")
+
+frequency<-c(40,4,10,253,36,263,262,0,585,120,49,52,302,82,39,205,27,12,26,3,83,
+             203,3,8,213,17,0,0,0,0,8,0,0,0,0,0,0)
+
+keywords<-cbind(word,frequency)
+
+kable(keywords)
+```
+
+
+
+
 ## Generate Word Cloud
 
 ```{r}
 matrix <- as.matrix(plans.tdm) 
 words <- sort(rowSums(matrix),decreasing=TRUE) 
 df <- data.frame(word = names(words),freq=words)
-wordcloud(words = df$word, freq = df$freq, min.freq = 1, max.words=200, random.order=FALSE, rot.per=0.35, colors=brewer.pal(8, "Dark2"))
+wordcloud(words = df$word, freq = df$freq, min.freq = 50, max.words=90, random.order=FALSE, rot.per=0.35, colors=brewer.pal(8, "Dark2"))
 ```
+
+
+
 
