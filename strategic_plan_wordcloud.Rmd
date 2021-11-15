@@ -1,0 +1,58 @@
+---
+title: "Strategic Plan Word Cloud"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, message=FALSE, warning=FALSE}
+library(pdftools)
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(tidyverse)
+library(knitr)
+```
+
+```{r, echo=-1, message=FALSE, warning=FALSE}
+setwd("~/Documents/strategic_plans/update")
+files<-list.files(pattern="pdf$")
+plans<-lapply(files,pdf_text)
+```
+
+```{r, message=FALSE, warning=FALSE}
+corp<-Corpus(URISource(files),readerControl = list(reader=readPDF))
+```
+
+```{r, message=FALSE, warning=FALSE}
+plans.tdm <- TermDocumentMatrix(corp, 
+                                control = 
+                                  list(removePunctuation = TRUE,
+                                       stopwords = TRUE,
+                                       tolower = TRUE,
+                                       stemming = FALSE,
+                                       removeNumbers = TRUE,
+                                       bounds = list(global = c(3, Inf)))) 
+```
+
+```{r}
+freq <- rowSums(as.matrix(plans.tdm))
+freq["commons"]
+freq["library"]
+```
+
+
+```{r, message=FALSE}
+matrix <- as.matrix(plans.tdm) 
+words <- sort(rowSums(matrix),decreasing=TRUE) 
+df <- data.frame(word = names(words),freq=words)
+```
+
+```{r, message=FALSE, warning=FALSE}
+set.seed(1234)
+wordcloud(words = df$word, freq = df$freq, min.freq = 50, max.words=90, random.order=FALSE, rot.per=0.35, colors=brewer.pal(8, "Dark2"))
+```
+
+
