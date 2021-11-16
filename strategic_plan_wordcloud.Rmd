@@ -9,7 +9,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Preliminaries
 
-Load the following libraries: 
+The following script assumes that all of the strategic plans listed in the strategic plans spreadsheet (located in the repository's [data](https://github.com/aranganath24/clirproject/tree/main/data) folder) are downloaded as PDFs to your R working directory. 
+
+Once the plans are downloaded and stored as individual pdf files in the working directory, load the following libraries: 
 
 ```{r, message=FALSE, warning=FALSE}
 # Load relevant libraries
@@ -20,8 +22,6 @@ library(wordcloud)
 library(tidyverse)
 library(knitr)
 ```
-
-The following script assumes that all of the strategic plans listed in the strategic plans spreadsheet (located in the repository's [data](https://github.com/aranganath24/clirproject/tree/main/data) folder) are downloaded as PDFs to your R working directory. 
 
 ## Create vector of strategic plan document names
 

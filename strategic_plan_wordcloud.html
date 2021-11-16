@@ -170,7 +170,8 @@ pre code {
 
 <div id="preliminaries" class="section level2">
 <h2>Preliminaries</h2>
-<p>Load the following libraries:</p>
+<p>The following script assumes that all of the strategic plans listed in the strategic plans spreadsheet (located in the repository’s <a href="https://github.com/aranganath24/clirproject/tree/main/data">data</a> folder) are downloaded as PDFs to your R working directory.</p>
+<p>Once the plans are downloaded and stored as individual pdf files in the working directory, load the following libraries:</p>
 <pre class="r"><code># Load relevant libraries
 library(pdftools)
 library(tm)
@@ -178,7 +179,6 @@ library(SnowballC)
 library(wordcloud)
 library(tidyverse)
 library(knitr)</code></pre>
-<p>The following script assumes that all of the strategic plans listed in the strategic plans spreadsheet (located in the repository’s <a href="https://github.com/aranganath24/clirproject/tree/main/data">data</a> folder) are downloaded as PDFs to your R working directory.</p>
 </div>
 <div id="create-vector-of-strategic-plan-document-names" class="section level2">
 <h2>Create vector of strategic plan document names</h2>
