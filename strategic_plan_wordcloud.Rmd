@@ -7,7 +7,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Preliminaries
+
+Please load the following libraries: 
+
 ```{r, message=FALSE, warning=FALSE}
+# Load relevant libraries
 library(pdftools)
 library(tm)
 library(SnowballC)
@@ -16,18 +21,32 @@ library(tidyverse)
 library(knitr)
 ```
 
+The following script assumes that all of the strategic plans listed in the spreadsheet stored in the repository's "data" folder are downloaded as PDFs to your R working directory. 
+
+## Create vector of plan document names
+
+In the following, we make a vector of the names of strategic plan file names (all plans are stored as PDFs in the working directory): 
+
 ```{r, echo=-1, message=FALSE, warning=FALSE}
 setwd("~/Documents/strategic_plans/update")
+# Make a vector of the names of the PDF files (i.e. plan documents) in working directory
 files<-list.files(pattern="pdf$")
-plans<-lapply(files,pdf_text)
 ```
 
-```{r, message=FALSE, warning=FALSE}
-corp<-Corpus(URISource(files),readerControl = list(reader=readPDF))
-```
+## Make corpus and term document matrix
+
+We will now use the vector of plan document names to make a corpus based on the underlying text of the strategic plans; this corpus is assigned to an object named ```corpus_plans```:
 
 ```{r, message=FALSE, warning=FALSE}
-plans.tdm <- TermDocumentMatrix(corp, 
+# Makes corpus based on strategic plan documents
+corpus_plans<-Corpus(URISource(files),readerControl = list(reader=readPDF))
+```
+
+Now, we use the corpus as an argument in the ```TermDocumentMatrix``` function to make a term document matrix derived from the corpus. This term document matrix is assigned to an object named ```plans.tdm```
+
+```{r, message=FALSE, warning=FALSE}
+# Make term document matrix based on corpus_plans object
+plans.tdm <- TermDocumentMatrix(corpus_plans, 
                                 control = 
                                   list(removePunctuation = TRUE,
                                        stopwords = TRUE,
@@ -37,13 +56,17 @@ plans.tdm <- TermDocumentMatrix(corp,
                                        bounds = list(global = c(3, Inf)))) 
 ```
 
+## The Frequency of "Commons" in the Plan Corpus
+
+How many times does the word "commons" appear in the corpus of strategic plans. To find out, we create a new matrix, based on the term document matrix, that contains information on the number of times individual words appear in the corpus. We then extract the number of times  
+
 ```{r}
 freq <- rowSums(as.matrix(plans.tdm))
 freq["commons"]
 freq["library"]
 ```
 
-
+## Make Word Cloud 
 ```{r, message=FALSE}
 matrix <- as.matrix(plans.tdm) 
 words <- sort(rowSums(matrix),decreasing=TRUE) 
@@ -54,5 +77,4 @@ df <- data.frame(word = names(words),freq=words)
 set.seed(1234)
 wordcloud(words = df$word, freq = df$freq, min.freq = 50, max.words=90, random.order=FALSE, rot.per=0.35, colors=brewer.pal(8, "Dark2"))
 ```
-
 
