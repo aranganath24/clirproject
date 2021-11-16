@@ -80,3 +80,6 @@ set.seed(1234)
 wordcloud(words = df$word, freq = df$freq, min.freq = 50, max.words=90, random.order=FALSE, rot.per=0.35, colors=brewer.pal(8, "Dark2"))
 ```
 
+## Acknowledgements
+
+This brief script draws on previously published online guides to working with text data and generating word clouds in R. Especially helpful were Clay Ford's introduction to text mining in R (published through the University of Virginia Libraries and available [here](https://data.library.virginia.edu/reading-pdf-files-into-r-for-text-mining/)), STHDA's [tutorial](http://www.sthda.com/english/wiki/text-mining-and-word-cloud-fundamentals-in-r-5-simple-steps-you-should-know) on text mining and word clouds in R, and Celine Van den Rul's [tutorial](https://towardsdatascience.com/create-a-word-cloud-with-r-bde3e7422e8a) in the *towards data science* series on generating word clouds in R.  
