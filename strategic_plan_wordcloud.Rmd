@@ -1,5 +1,5 @@
 ---
-title: "Strategic Plan Word Cloud"
+title: "Code to Generate Word Cloud of Library Strategic Plans"
 output: html_document
 ---
 
@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Preliminaries
 
-Please load the following libraries: 
+Load the following libraries: 
 
 ```{r, message=FALSE, warning=FALSE}
 # Load relevant libraries
@@ -21,11 +21,11 @@ library(tidyverse)
 library(knitr)
 ```
 
-The following script assumes that all of the strategic plans listed in the spreadsheet stored in the repository's "data" folder are downloaded as PDFs to your R working directory. 
+The following script assumes that all of the strategic plans listed in the strategic plans spreadsheet (located in the repository's [data](https://github.com/aranganath24/clirproject/tree/main/data) folder) are downloaded as PDFs to your R working directory. 
 
 ## Create vector of plan document names
 
-In the following, we make a vector of the names of strategic plan file names (all plans are stored as PDFs in the working directory): 
+In the following, we make a vector of the names of strategic plan file names (all plans are stored as PDFs in the working directory), and assign this vector to an object named ```files```.
 
 ```{r, echo=-1, message=FALSE, warning=FALSE}
 setwd("~/Documents/strategic_plans/update")
@@ -35,10 +35,10 @@ files<-list.files(pattern="pdf$")
 
 ## Make corpus and term document matrix
 
-We will now use the vector of plan document names to make a corpus based on the underlying text of the strategic plans; this corpus is assigned to an object named ```corpus_plans```:
+We will now use the vector of plan document names (```files```) to make a text corpus that is based on the underlying text of the strategic plans; this corpus is assigned to an object named ```corpus_plans```:
 
 ```{r, message=FALSE, warning=FALSE}
-# Makes corpus based on strategic plan documents
+# Make corpus based on strategic plan documents
 corpus_plans<-Corpus(URISource(files),readerControl = list(reader=readPDF))
 ```
 
@@ -56,9 +56,9 @@ plans.tdm <- as.matrix(TermDocumentMatrix(corpus_plans,
                                        bounds = list(global = c(3, Inf)))))  
 ```
 
-## The Frequency of "Commons" in the Plan Corpus
+## The frequency of "commons" in the plan corpus
 
-How many times does the word "commons" appear in the corpus of strategic plans. To find out, we extract a vector that sums up the number of times various words appear in the corpus using the ```rowSums``` function, and assign this vector to an object called ```words```; we then create a data frame based on ```words```, with one column (named "word") containing the various words in the corpus, and the other column (named "freq") containing information on how many times the associated word appears in the corpus. We then extract the row with the words "commons" and "library" (as a reference point) to see how many times they appear in the corpus. 
+How many times does the word "commons" appear in the corpus of strategic plans? To find out, we extract a vector that sums up the number of times various words appear in the corpus using the ```rowSums``` function, and assign this vector to an object called ```words```; we then create a data frame based on ```words```, with one column (named "word") containing the various words in the corpus, and the other column (named "freq") containing information on how many times the associated word appears in the corpus. We then extract the rows with the words "commons" and "library" (to serve as a reference point) to see how many times they appear in the corpus. 
 
 ```{r}
 # Extract vector containing information on word frequencies
@@ -69,7 +69,9 @@ df <- data.frame(word = names(words),freq=words)
 df %>% filter(word=="commons"|word=="library") %>% remove_rownames()
 ```
 
-## Make Word Cloud 
+## Generate word cloud 
+
+Finally, we use the "word" and "freq" columns from the ```df``` object created above to generate a word cloud of the most frequently recurring words in the strategic plan corpus:
 
 ```{r, message=FALSE, warning=FALSE}
 # Set seed for reproducibility
