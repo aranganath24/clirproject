@@ -46,35 +46,35 @@ Now, we use the corpus as an argument in the ```TermDocumentMatrix``` function t
 
 ```{r, message=FALSE, warning=FALSE}
 # Make term document matrix based on corpus_plans object
-plans.tdm <- TermDocumentMatrix(corpus_plans, 
+plans.tdm <- as.matrix(TermDocumentMatrix(corpus_plans, 
                                 control = 
                                   list(removePunctuation = TRUE,
                                        stopwords = TRUE,
                                        tolower = TRUE,
                                        stemming = FALSE,
                                        removeNumbers = TRUE,
-                                       bounds = list(global = c(3, Inf)))) 
+                                       bounds = list(global = c(3, Inf)))))  
 ```
 
 ## The Frequency of "Commons" in the Plan Corpus
 
-How many times does the word "commons" appear in the corpus of strategic plans. To find out, we create a new matrix, based on the term document matrix, that contains information on the number of times individual words appear in the corpus. We then extract the number of times  
+How many times does the word "commons" appear in the corpus of strategic plans. To find out, we extract a vector that sums up the number of times various words appear in the corpus using the ```rowSums``` function, and assign this vector to an object called ```words```; we then create a data frame based on ```words```, with one column (named "word") containing the various words in the corpus, and the other column (named "freq") containing information on how many times the associated word appears in the corpus. We then extract the row with the words "commons" and "library" (as a reference point) to see how many times they appear in the corpus. 
 
 ```{r}
-freq <- rowSums(as.matrix(plans.tdm))
-freq["commons"]
-freq["library"]
+# Extract vector containing information on word frequencies
+words <- sort(rowSums(plans.tdm), decreasing=TRUE)
+# Create a data frame based on the information in "words"
+df <- data.frame(word = names(words),freq=words)
+# Find the frequency of "commons" and "library" in the corpus 
+df %>% filter(word=="commons"|word=="library") %>% remove_rownames()
 ```
 
 ## Make Word Cloud 
-```{r, message=FALSE}
-matrix <- as.matrix(plans.tdm) 
-words <- sort(rowSums(matrix),decreasing=TRUE) 
-df <- data.frame(word = names(words),freq=words)
-```
 
 ```{r, message=FALSE, warning=FALSE}
+# Set seed for reproducibility
 set.seed(1234)
+# Generate word cloud
 wordcloud(words = df$word, freq = df$freq, min.freq = 50, max.words=90, random.order=FALSE, rot.per=0.35, colors=brewer.pal(8, "Dark2"))
 ```
 
