@@ -23,7 +23,7 @@ library(knitr)
 
 The following script assumes that all of the strategic plans listed in the strategic plans spreadsheet (located in the repository's [data](https://github.com/aranganath24/clirproject/tree/main/data) folder) are downloaded as PDFs to your R working directory. 
 
-## Create vector of plan document names
+## Create vector of strategic plan document names
 
 In the following, we make a vector of the names of strategic plan file names (all plans are stored as PDFs in the working directory), and assign this vector to an object named ```files```.
 
@@ -56,7 +56,7 @@ plans.tdm <- as.matrix(TermDocumentMatrix(corpus_plans,
                                        bounds = list(global = c(3, Inf)))))  
 ```
 
-## The frequency of "commons" in the plan corpus
+## The frequency of the word "commons" in the strategic plan corpus
 
 How many times does the word "commons" appear in the corpus of strategic plans? To find out, we extract a vector that sums up the number of times various words appear in the corpus using the ```rowSums``` function, and assign this vector to an object called ```words```; we then create a data frame based on ```words```, with one column (named "word") containing the various words in the corpus, and the other column (named "freq") containing information on how many times the associated word appears in the corpus. We then extract the rows with the words "commons" and "library" (to serve as a reference point) to see how many times they appear in the corpus. 
 
