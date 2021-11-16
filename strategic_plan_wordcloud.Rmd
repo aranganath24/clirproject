@@ -1,5 +1,5 @@
 ---
-title: "Code to Generate Word Cloud of Library Strategic Plans"
+title: "Code to Generate Word Cloud of Key Words in Corpus of R1 Academic Library Strategic Plans"
 output: html_document
 ---
 
